@@ -1,0 +1,48 @@
+main {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.landingCntn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    background-color: #fafafa;
+    margin: 80px auto;
+    padding: 120px;
+    height: 400px;
+    width: 800px;
+}
+
+.landingCntn h3 {
+    font-size: 40px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.landingCntn p {
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.btnCntn {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* .button {
+    padding: 12px;
+    font-size: 14px;
+    background-color: #F8ECEC;
+    border-radius: 10000px;
+    border: 1px solid #FF1F1F;
+    width: 150px;
+    cursor: pointer;
+} */
