@@ -3,16 +3,23 @@ import styles from "./landing.module.css";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router";
 import { WalletContext } from "../App";
+import CheckingOverlay from "./Checking";
 
 function Landing() {
-  const { walletAddress, setWalletAddress, isEligible, setIsEligible } =
-    useContext(WalletContext);
+  const {
+    walletAddress,
+    setWalletAddress,
+    isEligible,
+    setIsEligible,
+    isChecking,
+    setIsChecking,
+  } = useContext(WalletContext);
   const [isConnected, setIsConnected] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [isChecking, setIsChecking] = useState(false);
+
   const navigate = useNavigate();
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const provider = new ethers.BrowserProvider(window.ethereum);
 
   const connectWallet = async () => {
     if (!isConnected) {
@@ -49,7 +56,7 @@ function Landing() {
           }
         }
         await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const address = await signer.getAddress();
 
         setWalletAddress(address);
@@ -64,6 +71,7 @@ function Landing() {
     }
   };
 
+  console.log(isChecking);
   const VerifyNFT = async function () {
     setIsChecking(true);
     try {
@@ -76,9 +84,9 @@ function Landing() {
       const tokenId = 3;
       const balance = await contract.balanceOf(walletAddress, tokenId);
       const balanceNumber = Number(balance.toString());
-      const eligible = (balanceNumber >= 0);
+      const eligible = balanceNumber >= 0;
       setIsEligible(eligible);
-      // console.log(isEligible);
+
       if (isEligible) {
         navigate("/form");
       } else {
@@ -91,8 +99,6 @@ function Landing() {
       setIsChecking(false);
     }
   };
-
-  console.log(isConnected);
 
   return (
     <main>

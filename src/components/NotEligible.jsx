@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import styles from "./notEligible.module.css";
 import { useNavigate } from "react-router";
 import { WalletContext } from "../App";
+import cancel from "../assets/cancel.svg";
 
 function NotEligible() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function NotEligible() {
   return (
     <main>
       <div className={styles.cntn}>
-        {/* <img src="" /> */}
+        <img src={cancel} alt="Cancel Logo" />
         <h3>Not Eligible</h3>
         <p>
           Sorry, you need to own at least 2 Web3Bridge Newsletter NFTs to claim

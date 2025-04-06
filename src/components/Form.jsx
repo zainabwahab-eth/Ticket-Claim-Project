@@ -1,12 +1,55 @@
 import React, { useContext } from "react";
 import { useFormik } from "formik";
 import { WalletContext } from "../App";
+import { ethers } from "ethers";
 import styles from "./form.module.css";
+import { useNavigate } from "react-router";
 import * as Yup from "yup";
+import Web3BridgeSBTABI from "../../artifacts/contracts/sbt.sol/Web3BridgeSBT.json";
+
+// auto-claim-web\artifacts\contracts\sbt.sol\Web3BridgeSBT.json
 
 function Form() {
-  const { walletAddress } = useContext(WalletContext);
-  console.log(walletAddress);
+  const navigate = useNavigate();
+  const { walletAddress, setWalletAddress } = useContext(WalletContext);
+  // console.log(walletAddress);
+
+  const tokenURI = "https://web3bridge-placeholder.com/metadata.json";
+  const contractAddress = "0xB736b853363Ce51a09DbD8714eBA6108e0FE7957";
+
+  const mintSBT = async function (walletAddress) {
+    try {
+      if (window.ethereum) {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+
+        const contract = new ethers.Contract(
+          contractAddress,
+          Web3BridgeSBTABI.abi,
+          signer
+        );
+        const tx = await contract.safeMint(walletAddress, tokenURI);
+
+        console.log("Transaction sent:", tx);
+
+        await tx.wait();
+
+        alert("SBT minted successfully!");
+      } else {
+        console.error(
+          "MetaMask not found. Please install MetaMask to use this application."
+        );
+      }
+    } catch (error) {
+      console.error("Minting failed:", error);
+      alert("Minting failed. Please try again.");
+    }
+  };
+
+  const handleGoHome = function () {
+    navigate("/");
+    setWalletAddress(null);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -25,19 +68,20 @@ function Form() {
 
     onSubmit: (values) => {
       console.log(values);
+      mintSBT(walletAddress);
     },
   });
 
   return (
-    <div className={styles.formCntn} onClick={null}>
-      <button className={styles.homeBtn} onClick={null}>
+    <div className={styles.formCntn}>
+      <button className={styles.homeBtn} onClick={handleGoHome}>
         Go home
       </button>
 
       <p>You're eligible! Fill the form below to claim your ticket.</p>
 
       <form className={styles.form} onSubmit={formik.handleSubmit}>
-      <label>
+        <label>
           Wallet Address
           <input
             type="text"
@@ -46,7 +90,7 @@ function Form() {
             readOnly
           />
         </label>
-        
+
         <label>
           Fullname
           <input

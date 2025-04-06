@@ -3,7 +3,6 @@ import { WalletContext } from "../App";
 
 function Header() {
   const { walletAddress } = useContext(WalletContext);
-  console.log(walletAddress);
   return (
     <div>
       <div className="logo">
