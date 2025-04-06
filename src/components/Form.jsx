@@ -5,9 +5,7 @@ import { ethers } from "ethers";
 import styles from "./form.module.css";
 import { useNavigate } from "react-router";
 import * as Yup from "yup";
-import Web3BridgeSBTABI from "../../artifacts/contracts/sbt.sol/Web3BridgeSBT.json";
-
-// auto-claim-web\artifacts\contracts\sbt.sol\Web3BridgeSBT.json
+import Web3BridgeSBTABI from "../constants/web3bridgeSBT.json";
 
 function Form() {
   const navigate = useNavigate();

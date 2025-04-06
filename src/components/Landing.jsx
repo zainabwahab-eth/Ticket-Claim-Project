@@ -3,7 +3,6 @@ import styles from "./landing.module.css";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router";
 import { WalletContext } from "../App";
-import CheckingOverlay from "./Checking";
 
 function Landing() {
   const {
