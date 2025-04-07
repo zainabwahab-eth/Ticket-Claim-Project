@@ -16,9 +16,9 @@ function Form() {
   // const [error, setError] = useState(null);
 
   const tokenURI = "https://web3bridge-placeholder.com/metadata.json";
-  const contractAddress = "0xB736b853363Ce51a09DbD8714eBA6108e0FE7957";
+  const contractAddress = "0xB569c5Ebf731F4Da3e0A899B83aA826f48728166";
 
-  const SEPOLIA_CHAIN_ID = "0xaa36a7"; 
+  const SEPOLIA_CHAIN_ID = "0xaa36a7";
   const switchToSepolia = async () => {
     try {
       // Request to switch to Sepolia
