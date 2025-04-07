@@ -6,6 +6,7 @@ import NotEligible from "./components/NotEligible";
 import Form from "./components/Form";
 import Header from "./components/Header";
 import Checking from "./components/Checking";
+import admin from "./components/Checking";
 
 export const WalletContext = createContext();
 function App() {
@@ -34,6 +35,15 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Landing />} />
+
+            <Route
+              path="/admin"
+              element={
+                <ProtectedAdminRoute>
+                  <AdminDashboard />
+                </ProtectedAdminRoute>
+              }
+            />
 
             <Route
               path="/notEligible"

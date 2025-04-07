@@ -90,7 +90,7 @@ function Landing() {
       const tokenId = 3;
       const balance = await contract.balanceOf(walletAddress, tokenId);
       const balanceNumber = Number(balance.toString());
-      const eligible = balanceNumber >= 0;
+      const eligible = balanceNumber >= 2;
       setIsEligible(eligible);
 
       if (isEligible) {
