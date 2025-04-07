@@ -36,14 +36,14 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
 
-            <Route
+            {/* <Route
               path="/admin"
               element={
                 <ProtectedAdminRoute>
                   <AdminDashboard />
                 </ProtectedAdminRoute>
               }
-            />
+            /> */}
 
             <Route
               path="/notEligible"
