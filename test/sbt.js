@@ -26,12 +26,6 @@ describe("Web3BridgeSBT", function () {
     expect(await sbt.tokenURI(0)).to.equal(tokenURI);
   });
 
-  it("Should not allow non-owners to mint", async function () {
-    await expect(
-      sbt.connect(recipient).safeMint(other.address, "ipfs://example")
-    ).to.be.revertedWithCustomError(sbt, "OwnableUnauthorizedAccount");
-  });
-
   it("Should prevent token transfers", async function () {
     await sbt.safeMint(recipient.address, "ipfs://example");
 

@@ -6,18 +6,86 @@ import styles from "./form.module.css";
 import { useNavigate } from "react-router";
 import * as Yup from "yup";
 import Web3BridgeSBTABI from "../constants/web3bridgeSBT.json";
+import { analytics } from "../../firebase";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 function Form() {
   const navigate = useNavigate();
   const { walletAddress, setWalletAddress } = useContext(WalletContext);
-  // console.log(walletAddress);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
 
   const tokenURI = "https://web3bridge-placeholder.com/metadata.json";
   const contractAddress = "0xB736b853363Ce51a09DbD8714eBA6108e0FE7957";
 
-  const mintSBT = async function (walletAddress) {
+  const SEPOLIA_CHAIN_ID = "0xaa36a7"; 
+  const switchToSepolia = async () => {
+    try {
+      // Request to switch to Sepolia
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: SEPOLIA_CHAIN_ID }],
+      });
+      return true;
+    } catch (switchError) {
+      if (switchError.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: SEPOLIA_CHAIN_ID,
+                chainName: "Sepolia",
+                nativeCurrency: {
+                  name: "Sepolia Ether",
+                  symbol: "ETH",
+                  decimals: 18,
+                },
+                rpcUrls: ["https://rpc.sepolia.org"],
+                blockExplorerUrls: ["https://sepolia.etherscan.io"],
+              },
+            ],
+          });
+          return true;
+        } catch (addError) {
+          console.error("Error adding Sepolia network:", addError);
+          return false;
+        }
+      }
+      console.error("Error switching to Sepolia network:", switchError);
+      return false;
+    }
+  };
+
+  const storeUserData = async function (userData) {
+    try {
+      const docRef = await addDoc(collection(analytics, "verifiedUsers"), {
+        fullname: userData.fullname,
+        email: userData.email,
+        gender: userData.gender,
+        walletAddress: userData.address,
+        timestamp: Timestamp.now(),
+        verificationStatus: "verified",
+      });
+
+      console.log("User data stored with ID: ", docRef.id);
+      return true;
+    } catch (err) {
+      console.error("Error saving to Firestore:", err);
+      return false;
+    }
+  };
+
+  const mintSBT = async function (walletAddress, userData) {
     try {
       if (window.ethereum) {
+        const switchSuccessful = await switchToSepolia();
+
+        if (!switchSuccessful) {
+          alert("Please switch to Sepolia network to mint the SBT");
+          return;
+        }
+
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
 
@@ -32,7 +100,15 @@ function Form() {
 
         await tx.wait();
 
-        alert("SBT minted successfully!");
+        const stored = await storeUserData(userData);
+        if (stored) {
+          alert("SBT minted successfully! Your data has been recorded.");
+          // navigate("/success");
+        } else {
+          alert(
+            "SBT minted successfully, but there was an issue recording your data."
+          );
+        }
       } else {
         console.error(
           "MetaMask not found. Please install MetaMask to use this application."
@@ -66,7 +142,7 @@ function Form() {
 
     onSubmit: (values) => {
       console.log(values);
-      mintSBT(walletAddress);
+      mintSBT(walletAddress, values);
     },
   });
 

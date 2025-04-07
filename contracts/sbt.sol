@@ -25,7 +25,6 @@ contract Web3BridgeSBT is ERC721URIStorage, Ownable {
 
     function safeMint(address to, string memory uri)
         public
-        onlyOwner
         returns (uint256)
     {
         uint256 tokenId = _nextTokenId;

@@ -18,14 +18,15 @@ function Landing() {
 
   const navigate = useNavigate();
 
-  const provider = new ethers.BrowserProvider(window.ethereum);
-
   const connectWallet = async () => {
     if (!isConnected) {
-      if (!window.ethereum) {
+      if (typeof window === "undefined" || !window.ethereum) {
         setErrorMessage("Please Install MetaMask");
         return;
       }
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+
       try {
         try {
           await window.ethereum.request({
@@ -74,6 +75,12 @@ function Landing() {
   const VerifyNFT = async function () {
     setIsChecking(true);
     try {
+      if (typeof window === "undefined" || !window.ethereum) {
+        setErrorMessage("Please install MetaMask to verify.");
+        return;
+      }
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
       const contractAddress = "0xc26066eC5915647868feEc5dC958dB4fb421B958";
       const abi = [
         "function balanceOf(address account, uint256 id) external view returns (uint256)",
