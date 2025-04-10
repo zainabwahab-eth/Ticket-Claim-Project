@@ -3,6 +3,12 @@
     margin: 0 auto;
     padding: 20px;
   }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   
   .adminContainer h1 {
     color: #333;
@@ -32,6 +38,11 @@
     text-align: left;
     border-bottom: 1px solid #ddd;
   }
+
+  .usersTable td {
+    font-size: 14px;
+  }
+  
   
   .usersTable th {
     background-color: #f8f8f8;
@@ -49,20 +60,13 @@
   
   .address {
     font-family: monospace;
-    font-size: 0.9em;
-    max-width: 140px;
-    overflow: hidden;
+    font-size: 14px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   
   .success {
     color: #2ecc71;
-    font-weight: bold;
-  }
-  
-  .pending {
-    color: #f39c12;
     font-weight: bold;
   }
   

@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import Web3BridgeSBTABI from "../constants/web3bridgeSBT.json";
 import { analytics } from "../../firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
+import Header from "./Header";
 
 function Form() {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ function Form() {
   const SEPOLIA_CHAIN_ID = "0xaa36a7";
   const switchToSepolia = async () => {
     try {
-      // Request to switch to Sepolia
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: SEPOLIA_CHAIN_ID }],
@@ -65,7 +65,7 @@ function Form() {
         gender: userData.gender,
         walletAddress: userData.address,
         timestamp: Timestamp.now(),
-        verificationStatus: "verified",
+        verificationStatus: "Verified",
       });
 
       console.log("User data stored with ID: ", docRef.id);
@@ -103,7 +103,6 @@ function Form() {
         const stored = await storeUserData(userData);
         if (stored) {
           alert("SBT minted successfully! Your data has been recorded.");
-          // navigate("/success");
         } else {
           alert(
             "SBT minted successfully, but there was an issue recording your data."
@@ -147,69 +146,72 @@ function Form() {
   });
 
   return (
-    <div className={styles.formCntn}>
-      <button className={styles.homeBtn} onClick={handleGoHome}>
-        Go home
-      </button>
-
-      <p>You're eligible! Fill the form below to claim your ticket.</p>
-
-      <form className={styles.form} onSubmit={formik.handleSubmit}>
-        <label>
-          Wallet Address
-          <input
-            type="text"
-            name="address"
-            value={formik.values.address}
-            readOnly
-          />
-        </label>
-
-        <label>
-          Fullname
-          <input
-            type="text"
-            name="fullname"
-            placeholder="eg John Doe"
-            onChange={formik.handleChange}
-            value={formik.values.fullname}
-          />
-          <div className={styles.error}>{formik.errors.fullname}</div>
-        </label>
-
-        <label>
-          Email
-          <input
-            type="email"
-            name="email"
-            placeholder="eg Johndoe@gmail.com"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-          />
-          <div className={styles.error}>{formik.errors.email}</div>
-        </label>
-
-        <label>
-          Select Gender
-          <select
-            name="gender"
-            value={formik.values.gender}
-            onChange={formik.handleChange}
-          >
-            <option value="">-- Select --</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-          {formik.touched.gender && formik.errors.gender && (
-            <div className={styles.error}>{formik.errors.gender}</div>
-          )}
-        </label>
-
-        <button className="button" type="submit">
-          Submit Form
+    <main>
+      <Header />
+      <div className={styles.formCntn}>
+        <button className={styles.homeBtn} onClick={handleGoHome}>
+          Go home
         </button>
-      </form>
-    </div>
+
+        <p>You're eligible! Fill the form below to claim your ticket.</p>
+
+        <form className={styles.form} onSubmit={formik.handleSubmit}>
+          <label>
+            Wallet Address
+            <input
+              type="text"
+              name="address"
+              value={formik.values.address}
+              readOnly
+            />
+          </label>
+
+          <label>
+            Fullname
+            <input
+              type="text"
+              name="fullname"
+              placeholder="eg John Doe"
+              onChange={formik.handleChange}
+              value={formik.values.fullname}
+            />
+            <div className={styles.error}>{formik.errors.fullname}</div>
+          </label>
+
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              placeholder="eg Johndoe@gmail.com"
+              onChange={formik.handleChange}
+              value={formik.values.email}
+            />
+            <div className={styles.error}>{formik.errors.email}</div>
+          </label>
+
+          <label>
+            Select Gender
+            <select
+              name="gender"
+              value={formik.values.gender}
+              onChange={formik.handleChange}
+            >
+              <option value="">-- Select --</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+            {formik.touched.gender && formik.errors.gender && (
+              <div className={styles.error}>{formik.errors.gender}</div>
+            )}
+          </label>
+
+          <button className="button" type="submit">
+            Submit Form
+          </button>
+        </form>
+      </div>
+    </main>
   );
 }
 

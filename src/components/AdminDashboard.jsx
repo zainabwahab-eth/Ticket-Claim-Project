@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { analytics } from "../../firebase";
-import styles from "./AdminDashboard.module.css";
+import styles from "./adminDash.module.css";
+import { useNavigate } from "react-router";
+import { useAuth } from "./AuthContext";
 
 function AdminDashboard() {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { logout } = useAuth();
 
   useEffect(() => {
     const fetchVerifiedUsers = async () => {
@@ -41,9 +45,19 @@ function AdminDashboard() {
     return date.toLocaleString();
   };
 
+  const handleClick = function () {
+    logout();
+    navigate("/");
+  };
+
   return (
     <div className={styles.adminContainer}>
-      <h1>Admin Dashboard</h1>
+      <div className={styles.header}>
+        <h1>Admin Dashboard</h1>
+        <button className="button" onClick={handleClick}>
+          Back to home
+        </button>
+      </div>
       <h2>Verified Users</h2>
 
       {loading ? (
@@ -67,12 +81,12 @@ function AdminDashboard() {
               {users.length > 0 ? (
                 users.map((user) => (
                   <tr key={user.id}>
-                    <td>{user.fullName}</td>
+                    <td>{user.fullname}</td>
                     <td>{user.email}</td>
                     <td>{user.gender}</td>
                     <td className={styles.address}>{user.walletAddress}</td>
                     <td>{formatDate(user.timestamp)}</td>
-                    <td className={user.verificationStatus}></td>
+                    <td className={styles.success}>{user.verificationStatus}</td>
                   </tr>
                 ))
               ) : (

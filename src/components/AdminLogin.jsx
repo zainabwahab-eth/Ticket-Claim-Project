@@ -1,40 +1,64 @@
-import React, { useState } from "react";
-import { Route, Navigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import styles from "./adminLogin.module.css";
+import { useAuth } from "./AuthContext";
 
 const ADMIN_PASSWORD = "Web3LagosAdmin2025";
 
-function AdminLogin({ setIsAuthenticated }) {
-  const [password, setPassword] = useState("");
+function AdminLogin() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [loginDetails, setLoginDetails] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = function (e) {
+    const { name, value } = e.target;
+    setLoginDetails((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      sessionStorage.setItem("adminAuthenticated", "true");
-      setIsAuthenticated(true);
-      
+    if (loginDetails.password === ADMIN_PASSWORD) {
+      login();
+      navigate("/adminDashboard");
     } else {
       setError("Invalid password");
     }
   };
 
   return (
-    <div className="admin-login">
+    <div className={styles.adminLogin}>
       <h2>Admin Login</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Password</label>
+      {error && <p className={styles.error}>{error}</p>}
+      <form className={styles.form} onSubmit={handleLogin}>
+        <label>
+          Username
           <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="username"
+            type="text"
+            value={loginDetails.username}
+            onChange={handleChange}
           />
-        </div>
-        <button type="submit">Login</button>
+        </label>
+
+        <label>
+          Password
+          <input
+            name="password"
+            type="password"
+            value={loginDetails.password}
+            onChange={handleChange}
+          />
+        </label>
+        <button className="button" type="submit">
+          Login
+        </button>
       </form>
     </div>
   );
 }
 
-export default AdminLogin
+export default AdminLogin;

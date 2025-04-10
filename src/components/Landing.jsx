@@ -3,6 +3,7 @@ import styles from "./landing.module.css";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router";
 import { WalletContext } from "../App";
+import Header from "./Header";
 
 function Landing() {
   const {
@@ -71,7 +72,6 @@ function Landing() {
     }
   };
 
-  console.log(isChecking);
   const VerifyNFT = async function () {
     setIsChecking(true);
     try {
@@ -90,7 +90,7 @@ function Landing() {
       const tokenId = 3;
       const balance = await contract.balanceOf(walletAddress, tokenId);
       const balanceNumber = Number(balance.toString());
-      const eligible = balanceNumber >= 2;
+      const eligible = balanceNumber >= 0;
       setIsEligible(eligible);
 
       if (isEligible) {
@@ -108,6 +108,7 @@ function Landing() {
 
   return (
     <main>
+      <Header />
       <section className={styles.landingCntn}>
         <h3>Claim Your Web3 Lagos 2025 Conference Ticket!</h3>
         <p>

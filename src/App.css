@@ -17,6 +17,12 @@ main {
   padding: 40px;
 }
 
+.right>button {
+  position: absolute;
+  top: 30px;
+  right: 200px;
+}
+
 .logo {
   position: absolute;
   top: 40px;
@@ -45,5 +51,5 @@ main {
   border: 1px solid #FF1F1F;
   width: 150px;
   cursor: pointer;
+  font-family: "Montserrat";
 }
-
